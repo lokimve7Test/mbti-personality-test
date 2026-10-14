@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="간단한 질문으로 나의 MBTI 성격유형과 주요 성향을 알아보세요."
+    />
+    <title>MBTI 성격유형 테스트</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="./app.js" defer></script>
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="site-header" aria-label="사이트 머리말">
+        <a class="brand" href="./" aria-label="MBTI 성격유형 테스트 홈">
+          <span class="brand-mark" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+          <span>MBTI</span>
+        </a>
+
+        <p class="header-note">나를 이해하는 첫걸음</p>
+      </header>
+
+      <main id="start-screen" class="hero" data-screen="start">
+        <section class="hero-copy" aria-labelledby="hero-title">
+          <p class="eyebrow">
+            <span aria-hidden="true">✦</span>
+            16가지 성격유형 테스트
+          </p>
+
+          <h1 id="hero-title">
+            나는 어떤<br />
+            <span>사람일까?</span>
+          </h1>
+
+          <p class="hero-description">
+            간단한 질문에 답하고<br class="mobile-break" />
+            나의 성향을 발견해 보세요.
+          </p>
+
+          <div class="hero-actions">
+            <button id="start-test" class="primary-action" type="button" disabled>
+              검사 시작하기
+              <span aria-hidden="true">→</span>
+            </button>
+
+            <p class="test-meta">
+              <span>약 5분</span>
+              <span aria-hidden="true">·</span>
+              <span>24문항</span>
+            </p>
+          </div>
+
+          <p id="question-error" class="question-error" role="alert" hidden>
+            검사 데이터를 불러오지 못했습니다. 페이지를 새로고침해 주세요.
+          </p>
+        </section>
+
+        <section class="hero-visual" aria-label="서로 다른 성향을 표현한 인물 일러스트">
+          <div class="character-stage">
+            <img
+              src="./assets/personality-characters.png"
+              alt="서로 다른 표정과 개성을 지닌 네 사람"
+              width="1365"
+              height="1121"
+            />
+
+            <span class="personality-chip chip-e" aria-hidden="true">E</span>
+            <span class="personality-chip chip-n" aria-hidden="true">N</span>
+            <span class="personality-chip chip-f" aria-hidden="true">F</span>
+            <span class="personality-chip chip-p" aria-hidden="true">P</span>
+            <span class="decorative-shape shape-diamond" aria-hidden="true"></span>
+            <span class="decorative-shape shape-dot" aria-hidden="true"></span>
+          </div>
+        </section>
+      </main>
+
+      <main id="question-screen" class="question-screen" data-screen="questions" hidden>
+        <section class="question-progress" aria-label="검사 진행 상황">
+          <p id="question-counter" class="question-counter">01 / 24</p>
+          <div
+            id="progress-track"
+            class="progress-track"
+            role="progressbar"
+            aria-label="검사 진행률"
+            aria-valuemin="1"
+            aria-valuemax="24"
+            aria-valuenow="1"
+          >
+            <span id="progress-fill" class="progress-fill"></span>
+          </div>
+        </section>
+
+        <section class="question-card" aria-labelledby="question-text">
+          <div class="question-art" aria-hidden="true">
+            <img id="question-character" src="./assets/character-01.png" alt="" />
+          </div>
+
+          <p id="question-label" class="question-label">질문 01</p>
+          <h2 id="question-text" tabindex="-1">질문을 불러오는 중입니다.</h2>
+
+          <fieldset class="answer-fieldset">
+            <legend class="visually-hidden">가장 가까운 답변 하나를 선택하세요.</legend>
+            <div id="answer-options" class="answer-options"></div>
+          </fieldset>
+
+          <nav class="question-navigation" aria-label="문항 이동">
+            <button id="previous-question" class="secondary-action" type="button">
+              <span aria-hidden="true">←</span>
+              이전
+            </button>
+            <button id="next-question" class="primary-action question-next" type="button" disabled>
+              <span class="button-label">다음</span>
+              <span aria-hidden="true">→</span>
+            </button>
+          </nav>
+
+        </section>
+      </main>
+
+      <main id="analysis-screen" class="analysis-screen" data-screen="analysis" hidden>
+        <section class="analysis-card" aria-labelledby="analysis-title">
+          <p class="analysis-eyebrow">성향 분석 결과</p>
+          <h1 id="analysis-title" tabindex="-1">나의 성향 점수</h1>
+          <p class="analysis-intro">
+            24개 답변을 네 가지 성향 축으로 나누어 계산한 결과입니다.
+          </p>
+
+          <div class="type-result" aria-label="계산된 성격유형">
+            <span>계산된 유형</span>
+            <strong id="result-type">----</strong>
+          </div>
+
+          <dl id="axis-results" class="axis-results"></dl>
+
+          <p class="calculation-note">
+            각 축의 원점수 범위는 -12부터 +12까지입니다. 양수는 왼쪽 성향,
+            음수는 오른쪽 성향을 뜻하며 0점은 동점으로 표시합니다.
+          </p>
+
+          <div class="analysis-actions">
+            <button id="open-result" class="primary-action" type="button" hidden>
+              결과 자세히 보기
+              <span aria-hidden="true">→</span>
+            </button>
+          </div>
+        </section>
+      </main>
+
+      <main id="result-screen" class="result-screen" data-screen="result" hidden>
+        <section class="result-hero" aria-labelledby="result-page-type">
+          <div class="result-hero-copy">
+            <p class="result-eyebrow">나의 MBTI 결과</p>
+            <h1 id="result-page-type" tabindex="-1">----</h1>
+            <p id="result-page-title" class="result-page-title"></p>
+            <p id="result-page-summary" class="result-page-summary"></p>
+            <ul id="result-keywords" class="result-keywords" aria-label="결과 핵심 키워드"></ul>
+          </div>
+
+          <div class="result-character" aria-hidden="true">
+            <img id="result-character" src="./assets/character-04.png" alt="" />
+          </div>
+        </section>
+
+        <div id="profile-result-sections">
+          <section class="result-insight-grid" aria-label="유형의 강점과 성장 포인트">
+            <article class="result-insight-card result-strengths-card">
+              <h2><span aria-hidden="true">♥</span> 나의 강점</h2>
+              <ul id="result-strengths"></ul>
+            </article>
+
+            <article class="result-insight-card result-growth-card">
+              <h2><span aria-hidden="true">●</span> 성장 포인트</h2>
+              <ul id="result-growth-points"></ul>
+            </article>
+          </section>
+
+          <section class="result-guide-card" aria-labelledby="result-guide-title">
+            <h2 id="result-guide-title"><span aria-hidden="true">▣</span> 나의 사용 설명서</h2>
+            <div class="result-guide-grid">
+              <article>
+                <span class="guide-icon guide-icon-relationship" aria-hidden="true">●</span>
+                <div>
+                  <h3>관계</h3>
+                  <p id="result-relationships"></p>
+                </div>
+              </article>
+              <article>
+                <span class="guide-icon guide-icon-work" aria-hidden="true">■</span>
+                <div>
+                  <h3>일과 공부</h3>
+                  <p id="result-work"></p>
+                </div>
+              </article>
+              <article>
+                <span class="guide-icon guide-icon-stress" aria-hidden="true">◆</span>
+                <div>
+                  <h3>스트레스</h3>
+                  <p id="result-stress"></p>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <aside class="result-action-tip" aria-labelledby="result-action-title">
+            <h2 id="result-action-title"><span aria-hidden="true">☀</span> 오늘의 작은 실천</h2>
+            <p id="result-action-tip"></p>
+          </aside>
+        </div>
+
+        <section id="boundary-result-section" class="boundary-result-section" hidden>
+          <div class="boundary-heading">
+            <p>균형 있게 사용하는 성향</p>
+            <h2>나의 경계 축</h2>
+          </div>
+          <div id="boundary-axis-list" class="boundary-axis-list"></div>
+        </section>
+
+        <nav class="result-actions" aria-label="결과 화면 이동">
+          <button id="restart-test" class="primary-action" type="button">
+            다시 검사하기
+            <span aria-hidden="true">↻</span>
+          </button>
+          <button id="back-to-analysis" class="secondary-action" type="button">
+            <span aria-hidden="true">←</span>
+            성향 점수 다시 보기
+          </button>
+        </nav>
+
+        <p id="result-disclaimer" class="result-disclaimer"></p>
+      </main>
+
+      <footer class="page-footer" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+      </footer>
+    </div>
+  </body>
+</html>
